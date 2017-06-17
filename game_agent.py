@@ -46,7 +46,7 @@ def custom_score(game, player):
     enemy_legal_moves = game.get_legal_moves(enemy)
     score = len(player_legal_moves) - len(enemy_legal_moves)
 
-    return score
+    return float(score)
 
 
 def custom_score_2(game, player):
@@ -83,7 +83,7 @@ def custom_score_2(game, player):
     enemy_legal_moves = game.get_legal_moves(enemy)
     score = 10*len(player_legal_moves) - len(enemy_legal_moves)
 
-    return score
+    return float(score)
 
 
 def custom_score_3(game, player):
@@ -126,7 +126,7 @@ def custom_score_3(game, player):
             score = float("inf")
             break
 
-    return score
+    return float(score)
 
 
 class IsolationPlayer:
@@ -151,7 +151,7 @@ class IsolationPlayer:
         positive value large enough to allow the function to return before the
         timer expires.
     """
-    def __init__(self, search_depth=5, score_fn=custom_score, timeout=10.):
+    def __init__(self, search_depth=3, score_fn=custom_score, timeout=10.):
         self.search_depth = search_depth
         self.score = score_fn
         self.time_left = None
@@ -201,7 +201,8 @@ class MinimaxPlayer(IsolationPlayer):
         try:
             # The try/except block will automatically catch the exception
             # raised when the timer is about to expire.
-            return self.minimax(game, self.search_depth)
+            best_move = self.minimax(game, self.search_depth)
+            return best_move
 
         except SearchTimeout:
             pass  # Handle any actions required after timeout as needed
@@ -260,29 +261,31 @@ class MinimaxPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        best_move = (-1, -1)
+        if depth == 0:
+            return self.score(game, self), game.get_player_location(self)
+
         # best_score is change depending on the player.
         # If it is the turn of player, best score should be higher to win, so default value is -inf to be high.
         # Else it is the turn of enemy, best_score should be lower to win, so default value is inf to be low.
         best_score = float("-inf") if maximizing_player else float("inf")
+        best_move = (-1, -1)
 
-        legal_moves = game.get_legal_moves(self)
+        player = self if maximizing_player else game.get_opponent(self)
+        legal_moves = game.get_legal_moves(player)
         if not legal_moves:
-            return game.utility(self), best_move
-        if depth == 0:
-            return self.score(game, self), game.get_player_location(self)
+            return self.score(game, self), (-1, -1)
 
         if maximizing_player:
             for legal_move in legal_moves:
                 forward = game.forecast_move(legal_move)
                 score, _ = self.helper(forward, depth - 1, False)
-                if score > best_score:
+                if score >= best_score:
                     best_score, best_move = score, legal_move
         else:
             for legal_move in legal_moves:
                 forward = game.forecast_move(legal_move)
                 score, _ = self.helper(forward, depth - 1, True)
-                if score < best_score:
+                if score <= best_score:
                     best_score, best_move = score, legal_move
 
         return best_score, best_move
@@ -334,12 +337,14 @@ class AlphaBetaPlayer(IsolationPlayer):
         try:
             # The try/except block will automatically catch the exception
             # raised when the timer is about to expire.
-            return self.alphabeta(game, self.search_depth)
+            best_move = self.alphabeta(game, self.search_depth)
+            return best_move
 
         except SearchTimeout:
             pass  # Handle any actions required after timeout as needed
 
         # Return the best move from the last completed search iteration
+
         return best_move
 
     def alphabeta(self, game, depth, alpha=float("-inf"), beta=float("inf")):
@@ -398,17 +403,19 @@ class AlphaBetaPlayer(IsolationPlayer):
         if self.time_left() < self.TIMER_THRESHOLD:
             raise SearchTimeout()
 
-        best_move = (-1, -1)
+        if depth == 0:
+            return self.score(game, self), game.get_player_location(self)
+
         # best_score is change depending on the player.
         # If it is the turn of player, best score should be higher to win, so default value is -inf to be high.
         # Else it is the turn of enemy, best_score should be lower to win, so default value is inf to be low.
         best_score = float("-inf") if maximizing_player else float("inf")
+        best_move = (-1, -1)
 
-        legal_moves = game.get_legal_moves(self)
+        player = self if maximizing_player else game.get_opponent(self)
+        legal_moves = game.get_legal_moves(player)
         if not legal_moves:
             return game.utility(self), best_move
-        if depth == 0:
-            return self.score(game, self), game.get_player_location(self)
 
         # alpha is the maximum lower limit
         # beta is the minimum higher limit
@@ -417,7 +424,7 @@ class AlphaBetaPlayer(IsolationPlayer):
             for legal_move in legal_moves:
                 forward = game.forecast_move(legal_move)
                 score, _ = self.helper(forward, depth - 1, alpha, beta, False)
-                if score > best_score:
+                if score >= best_score:
                     best_score, best_move = score, legal_move
                 if best_score >= beta:
                     return best_score, best_move
@@ -426,7 +433,7 @@ class AlphaBetaPlayer(IsolationPlayer):
             for legal_move in legal_moves:
                 forward = game.forecast_move(legal_move)
                 score, _ = self.helper(forward, depth - 1, alpha, beta, True)
-                if score < best_score:
+                if score <= best_score:
                     best_score, best_move = score, legal_move
                 if best_score <= alpha:
                     return best_score, best_move
