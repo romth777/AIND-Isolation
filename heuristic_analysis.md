@@ -1,4 +1,4 @@
-# AIND Project2 Isolation part1
+# AIND Project2 Isolation - Heuristic Analysis
 ## Selected Heuristics
 I prepared Heuristics as below.  
 In custom 1, we tried grasping which one is better by taking the difference between the range of movement of ourselves and the opponent. It is because I wanted to minimize the range that the opponent could move.  
