@@ -8,11 +8,11 @@ In custom 3, we chose to preferentially choose the choice that seals the movemen
 ## Results
 ![image1](./image1.png)
 
-In this examination, custom 3 has the best result.
-However, repeating the match multiple times sometimes resulted in custom 2 and custom 3 results, so depending on the condition custom 2 may give better results.
-At least custom3 has more constraints than custom2, so it can be said that it is more specialized Heuristics.
-So we decided that this result is valid.
-Of course, I hope to produce a better score, but I think that this will be out of the essence of the project, so I will do so far.
+In this review, Custom 2 showed the best results.
+However, repeating the game more than once could result in custom 2 and custom 3 results. Therefore, depending on the condition of Custom 3, better results may be obtained.
+At least custom3 has more constraints than custom2, so it can be said that it is a more professional heuristic.
+Therefore, we judged that this result is valid.
+Of course, I hope to give better scores, but I think that this will be out of the essence of the project, so I will keep exploring good scores so far.
 
 ## Future Challenges
 In the task of this time, it was necessary for the developer himself / herself to build the evaluation function according to the characteristics of the game.

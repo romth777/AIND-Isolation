@@ -272,7 +272,7 @@ class MinimaxPlayer(IsolationPlayer):
 
         player = self if maximizing_player else game.get_opponent(self)
         legal_moves = game.get_legal_moves(player)
-        if not legal_moves:
+        if len(legal_moves) == 0:
             return self.score(game, self), (-1, -1)
 
         if maximizing_player:
@@ -333,12 +333,14 @@ class AlphaBetaPlayer(IsolationPlayer):
         # Initialize the best move so that this function returns something
         # in case the search fails due to timeout
         best_move = (-1, -1)
+        depth = 1
 
         try:
             # The try/except block will automatically catch the exception
             # raised when the timer is about to expire.
-            best_move = self.alphabeta(game, self.search_depth)
-            return best_move
+            while True:
+                best_move = self.alphabeta(game, depth)
+                depth += 1
 
         except SearchTimeout:
             pass  # Handle any actions required after timeout as needed
@@ -414,25 +416,22 @@ class AlphaBetaPlayer(IsolationPlayer):
 
         player = self if maximizing_player else game.get_opponent(self)
         legal_moves = game.get_legal_moves(player)
-        if not legal_moves:
-            return game.utility(self), best_move
+        if len(legal_moves) == 0:
+            return self.score(game, self), best_move
 
         # alpha is the maximum lower limit
         # beta is the minimum higher limit
+        for legal_move in legal_moves:
+            forward = game.forecast_move(legal_move)
+            score, _ = self.helper(forward, depth - 1, alpha, beta, not maximizing_player)
 
-        if maximizing_player:
-            for legal_move in legal_moves:
-                forward = game.forecast_move(legal_move)
-                score, _ = self.helper(forward, depth - 1, alpha, beta, False)
+            if maximizing_player:
                 if score >= best_score:
                     best_score, best_move = score, legal_move
                 if best_score >= beta:
                     return best_score, best_move
                 alpha = max(alpha, best_score)
-        else:
-            for legal_move in legal_moves:
-                forward = game.forecast_move(legal_move)
-                score, _ = self.helper(forward, depth - 1, alpha, beta, True)
+            else:
                 if score <= best_score:
                     best_score, best_move = score, legal_move
                 if best_score <= alpha:
