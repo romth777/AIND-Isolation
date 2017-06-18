@@ -101,6 +101,22 @@
 .scrollbars-visible-always .markdown-preview pre.editor-colors .vertical-scrollbar, .scrollbars-visible-always .markdown-preview pre.editor-colors .horizontal-scrollbar { visibility: hidden; }
 .scrollbars-visible-always .markdown-preview pre.editor-colors:hover .vertical-scrollbar, .scrollbars-visible-always .markdown-preview pre.editor-colors:hover .horizontal-scrollbar { visibility: visible; }
 .markdown-preview .task-list-item-checkbox { position: absolute; margin: 0.25em 0px 0px -1.4em; }
+.markdown-preview { background: white !important; }
+.markdown-preview p, .markdown-preview h1, .markdown-preview h2, .markdown-preview h3, .markdown-preview h4, .markdown-preview h5, .markdown-preview h6, .markdown-preview li, .markdown-preview th, .markdown-preview td, .markdown-preview strong { color: black !important; }
+.markdown-preview body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; width: 800px; margin: auto; padding: 10px; background: rgb(255, 255, 255); }
+.markdown-preview h1 { font-size: 20px; color: rgb(117, 117, 117); text-align: center; margin-bottom: 10px; }
+.markdown-preview h1:hover { color: rgb(255, 255, 255); text-shadow: rgb(51, 51, 51) 1px 1px 1px; background-color: rgb(117, 117, 117); }
+.markdown-preview h2 { font-size: 17px; color: rgb(57, 114, 73); }
+.markdown-preview h2::before { content: ""; display: inline-block; margin-right: 1%; width: 16%; height: 10px; background-color: rgb(156, 183, 112); }
+.markdown-preview h2:hover { color: rgb(255, 255, 255); text-shadow: rgb(51, 51, 51) 1px 1px 1px; background-color: rgb(57, 114, 73); }
+.markdown-preview dt { float: left; clear: left; width: 17%; }
+.markdown-preview dd { margin-left: 17%; }
+.markdown-preview p { margin-top: 0px; margin-bottom: 3px; }
+.markdown-preview blockquote { text-align: center; }
+.markdown-preview a { text-decoration: none; color: rgb(57, 114, 73); }
+.markdown-preview a:hover, .markdown-preview a:active { color: rgb(255, 255, 255); text-decoration: none; text-shadow: rgb(51, 51, 51) 1px 1px 1px; background-color: rgb(57, 114, 73); }
+.markdown-preview hr { color: rgb(166, 166, 166); }
+.markdown-preview table { width: 100%; }
 .bracket-matcher .region {
   border-bottom: 1px dotted lime;
   position: absolute;
@@ -485,12 +501,11 @@ pre.editor-colors .fold-marker:after {
 </style>
   </head>
   <body class='markdown-preview' data-use-github-style><h1 id="aind-project2-isolation-research-review">AIND Project2 Isolation - Research Review</h1>
-<h2 id="research">Research</h2>
-<h3 id="elmo">elmo</h3>
-<h4 id="what-is-elmo">What is elmo</h4>
+<h2 id="elmo">elmo</h2>
+<h3 id="what-is-elmo">What is elmo</h3>
 <p><a href="https://github.com/mk-takizawa/elmo_for_learn">Elmo</a> is a shogi program that won <a href="http://www2.computer-shogi.org/wcsc27/">the World Computer Shogi Championship</a>.
 In this report, the result of investigation on the algorithm is described.</p>
-<h4 id="algorithm">algorithm</h4>
+<h3 id="algorithm">algorithm</h3>
 <p>For the evaluation value, we use logistic regression under the hypothesis that if the winning rate follows the binomial distribution (winning or losing), the evaluation value will follow the logistic distribution.
 However, instead of simply applying maximum-likelihood estimation logistic regression, we adopt a method of feeding a deep search result to a shallow search result as a regularization term.</p>
 <p>Similarly entropy is used for regularization term.
@@ -499,10 +514,10 @@ This is merely because the loss term of logistic regression usually uses cross e
 · Output victory or defeat
 · Random move is executed only at the time of the first phase generation (noise is added to winning percentage)</p>
 <p>It is optimized only once with a search depth of 650 billion weak.</p>
-<h3 id="alpha-go">alpha go</h3>
-<h4 id="what-is-alpha-go">What is alpha go</h4>
+<h2 id="alpha-go">alpha go</h2>
+<h3 id="what-is-alpha-go">What is alpha go</h3>
 <p>Alpha go is a Go program developed by DeepMind and is known for breaking pro and shogi players in China and Korea one by one.</p>
-<h4 id="algorithm">algorithm</h4>
+<h3 id="algorithm">algorithm</h3>
 <p>Alpha go basically uses Monte Carlo tree search to search for the next hand.
 Furthermore, although it is an evaluation value for the search, two points, a policy function and a value function, are prepared, and the policy function indicates the place to hit next.
 Then, the value function expresses the evaluation value.
